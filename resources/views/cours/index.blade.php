@@ -23,9 +23,9 @@
                         
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="example" class="display" style="width: 100%">
+                                <table id="example" class="table table-hover" style="width: 100%">
                                     <thead>
-                                        <tr>
+                                        <tr class="table-active">
                                             <th>ID</th>
                                             <th>Libellé</th>
                                             <th>Crédit</th>

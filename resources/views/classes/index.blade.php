@@ -25,9 +25,9 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="example" class="display" style="width: 100%">
+                                <table id="example" class="table table-hover" style="width: 100%">
                                     <thead>
-                                        <tr>
+                                        <tr class="table-active">
                                             <th>ID</th>
                                             <th>Libellé</th>
                                             <th>Description</th>
@@ -43,16 +43,16 @@
                                                 <td>{{ $classroom->description }}</td>
                                                 <td>
                                                     @foreach ($classroom->cours as $cour)
-                                                        <span class="badge badge-info">{{ $cour->libelle }}</span>
+                                                      <span class="badge badge-info">{{ $cour->libelle }}</span>
                                                     @endforeach
                                                 </td>
                                                 <td class="text-center">
-                                                    <div class="d-grid g-4 d-md-flex justify-content-md-end">
+                                                    <div class="d-grid d-md-flex justify-content-md-end">
                                                         <button class="btn btn-sm btn-warning"
                                                             onclick="editClassroom({{ $classroom }})"
                                                             data-toggle="modal"
                                                             data-target="#modalAddEdit">Modifier</button>
-
+                                                            &nbsp;&nbsp;&nbsp;
                                                         <form action="{{ route('admin.classrooms.destroy', $classroom->id) }}" method="POST" style="display:inline-block;">
                                                             @csrf @method('DELETE')
                                                             <button type="submit" class="btn btn-sm btn-danger"

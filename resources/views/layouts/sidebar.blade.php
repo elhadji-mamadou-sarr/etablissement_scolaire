@@ -11,7 +11,7 @@
                         <i class="icon icon-app-store"></i>Dashboard</a>
                     </li>
 
-                    <li><a class="">
+                    <li><a class="" href="{{ route('admin.users.index') }}">
                         <i class="icon icon-single-04"></i>Utilisateurs</a>
                     </li>
 

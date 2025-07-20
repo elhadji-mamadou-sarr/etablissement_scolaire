@@ -6,6 +6,7 @@ use App\Http\Controllers\CourController;
 use App\Http\Controllers\EleveParentController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +41,7 @@ Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     Route::resource('cours', CourController::class);
     Route::resource('classrooms', ClassroomController::class);
+    Route::resource('users', UserController::class);
 
 });
 
