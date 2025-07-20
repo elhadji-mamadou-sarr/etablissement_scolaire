@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ClassroomController;
+use App\Http\Controllers\CourController;
 use App\Http\Controllers\EleveParentController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\ProfileController;
@@ -30,10 +32,15 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware('auth')->group(function () {
+});
+
 // Routes Administrateur
 Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-   
+    Route::resource('cours', CourController::class);
+    Route::resource('classrooms', ClassroomController::class);
+
 });
 
 // Routes Enseignant
@@ -46,5 +53,7 @@ Route::middleware(['auth', 'role:enseignant'])->prefix('enseignant')->name('ense
 Route::middleware(['auth', 'role:eleve_parent'])->prefix('eleve-parent')->name('eleve-parent.')->group(function () {
     Route::get('/dashboard', [EleveParentController::class, 'dashboard'])->name('dashboard');
 });
+
+
 
 require __DIR__.'/auth.php';

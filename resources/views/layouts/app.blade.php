@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/owl-carousel/css/owl.theme.default.min.css') }}">
     <link href="{{ asset('assets/vendor/jqvmap/css/jqvmap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.css" rel="stylesheet">
 
 
 
@@ -131,7 +132,14 @@
     <!-- Dashboard spécifique -->
     <script src="{{ asset('assets/js/dashboard/dashboard-1.js') }}"></script>
 
-    
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/js/tom-select.complete.min.js"></script>
+
+    <script>
+        new TomSelect('select[multiple]',  {plugins: {remove_button: {title: 'supprimer' } }})
+
+    </script>
+
+    @stack('scripts')
 
 </body>
 
