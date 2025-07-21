@@ -23,8 +23,8 @@
                         <i class="icon icon-globe-2"></i>Cours</a>      
                     </li>
 
-                    <li><a class="">
-                        <i class="icon icon-form"></i>Matières</a>
+                    <li><a class="" href="{{route('admin.eleves.index')}}">
+                        <i class="icon icon-globe-2"></i>Gestions des eleves</a>      
                     </li>
 
                     <li><a class="" >

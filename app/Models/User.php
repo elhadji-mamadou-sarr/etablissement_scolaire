@@ -82,5 +82,9 @@ class User extends Authenticatable
     {
         return $this->role->label();
     }
-    
+    public function eleve()
+{
+    return $this->hasOne(Eleve::class);
+}
+
 }

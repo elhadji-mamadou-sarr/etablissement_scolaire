@@ -7,14 +7,17 @@ use App\Http\Controllers\EleveParentController;
 use App\Http\Controllers\EnseignantController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EleveController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/dashboard', function () {
     $user = Auth::user();
     
@@ -42,6 +45,7 @@ Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin
     Route::resource('cours', CourController::class);
     Route::resource('classrooms', ClassroomController::class);
     Route::resource('users', UserController::class);
+    Route::resource('eleves', EleveController::class);
 
 });
 
