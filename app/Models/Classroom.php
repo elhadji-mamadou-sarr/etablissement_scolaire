@@ -22,5 +22,13 @@ class Classroom extends Model
         return $this->belongsToMany(Cour::class);
     }
  
+    public function enseignants()
+{
+    return $this->belongsToMany(Enseignant::class);
+}
+public function notes() {
+    return $this->hasMany(Note::class);
+}
+
 
 }

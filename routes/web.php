@@ -11,6 +11,9 @@ use App\Http\Controllers\EleveController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Enseignant\NoteController;
+use App\Http\Controllers\BulletinPreviewController;
+use App\Http\Controllers\AdminBulletinController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -46,13 +49,24 @@ Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin
     Route::resource('classrooms', ClassroomController::class);
     Route::resource('users', UserController::class);
     Route::resource('eleves', EleveController::class);
+    Route::resource('enseignants', EnseignantController::class);
+    Route::get('bulletins', [AdminBulletinController::class, 'index'])->name('bulletins.index');
+    Route::get('/bulletins/{eleve}/{semestre}', [BulletinPreviewController::class, 'show'])
+    ->name('bulletins.preview');
+    
+
+
+    
+    
+
 
 });
 
 // Routes Enseignant
 Route::middleware(['auth', 'role:enseignant'])->prefix('enseignant')->name('enseignant.')->group(function () {
     Route::get('/dashboard', [EnseignantController::class, 'dashboard'])->name('dashboard');
-   
+    
+   Route::resource('notes', NoteController::class);
 });
 
 // Routes Élève/Parent

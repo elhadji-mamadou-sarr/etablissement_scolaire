@@ -11,21 +11,15 @@
          */
         public function up(): void
         {
-            Schema::create('cours', function (Blueprint $table) {
+            Schema::create('enseignants', function (Blueprint $table) {
                 $table->id();
-                $table->string("libelle");
-                $table->float("credit");
-                $table->integer("volume");
-                $table->string("semestre");
+                $table->foreignId('user_id')->constrained()->onDelete('cascade');
                 $table->timestamps();
             });
         }
 
-        /**
-         * Reverse the migrations.
-         */
         public function down(): void
         {
-            Schema::dropIfExists('cours');
+            Schema::dropIfExists('enseignants');
         }
     };
