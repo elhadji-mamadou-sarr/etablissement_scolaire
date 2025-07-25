@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Requests\EleveRequest;
 
 class EleveController extends Controller
 {
@@ -62,10 +63,65 @@ class EleveController extends Controller
         return redirect()->back()->with('success', 'Élève ajouté avec succès.');
     }
 
-    public function destroy(Eleve $eleve)
-    {
-        $eleve->user->delete();
+  public function destroy(Eleve $eleve)
+{
+    try {
+        $eleve->load('user');
+        
+        if ($eleve->user) {
+            // Supprimez d'abord le justificatif s'il existe
+            if ($eleve->user->justificatif_path) {
+                Storage::disk('public')->delete($eleve->user->justificatif_path);
+            }
+            $eleve->user->delete();
+        }
+        
         $eleve->delete();
+        
         return redirect()->back()->with('success', 'Élève supprimé avec succès.');
+        
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Erreur lors de la suppression: ' . $e->getMessage());
     }
+}
+   public function update(EleveRequest $request, Eleve $eleve)
+{
+    // Chargez explicitement la relation user si elle n'est pas déjà chargée
+    $eleve->load('user');
+    
+    // Vérifiez que l'utilisateur existe
+    if (!$eleve->user) {
+        return redirect()->back()->with('error', 'Utilisateur associé non trouvé');
+    }
+
+    $path = $eleve->user->justificatif_path ?? null;
+    
+    if ($request->hasFile('justificatif')) {
+        // Supprimer l'ancien justificatif s'il existe
+        if ($path) {
+            Storage::disk('public')->delete($path);
+        }
+        $path = $request->file('justificatif')->store('justificatifs', 'public');
+    }
+
+    // Mise à jour de l'utilisateur
+    $eleve->user->update([
+        'nom' => $request->nom,
+        'prenom' => $request->prenom,
+        'email' => $request->email,
+        'telephone' => $request->telephone,
+        'addresse' => $request->addresse,
+        'date_naissane' => $request->date_naissance,
+        'lieu' => $request->lieu,
+        'sexe' => $request->sexe,
+        'justificatif_path' => $path,
+    ]);
+
+    // Mise à jour de l'élève
+    $eleve->update([
+        'classroom_id' => $request->classroom_id,
+    ]);
+
+    return redirect()->back()->with('success', 'Élève mis à jour avec succès.');
+}
 }

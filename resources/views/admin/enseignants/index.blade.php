@@ -1,16 +1,15 @@
 <x-app-layout>
     <div class="content">
         <div class="container-fluid">
-
             <div class="row page-titles mx-0">
                 <div class="col-sm-6 p-md-0">
                     <div class="welcome-text">
-                        <h4>Liste des élèves</h4>
-                        <span class="ml-1">Gestion des élèves</span>
+                        <h4>Liste des enseignants</h4>
+                        <span class="ml-1">Gestion des enseignants</span>
                     </div>
                 </div>
                 <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalAddEditEleve" onclick="resetModal()">+ Ajouter un élève</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#modalAddEdit" onclick="resetModal()">+ Ajouter un enseignant</button>
                 </div>
             </div>
 
@@ -28,31 +27,42 @@
                                             <th>ID</th>
                                             <th>Nom</th>
                                             <th>Email</th>
-                                            <th>Classe</th>
-                                            <th>Matricule</th>
+                                            <th>Cours</th>
+                                            <th>Classes</th>
                                             <th class="text-center">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($eleves as $eleve)
+                                        @foreach ($enseignants as $enseignant)
                                             <tr>
-                                                <td>{{ $eleve->id }}</td>
-                                                <td>{{ $eleve->user->nom }} {{ $eleve->user->prenom }}</td>
-                                                <td>{{ $eleve->user->email }}</td>
-                                                <td>{{ $eleve->classroom->libelle }}</td>
-                                                <td>{{ $eleve->matricule }}</td>
+                                                <td>{{ $enseignant->id }}</td>
+                                                <td>{{ $enseignant->user->nom }} {{ $enseignant->user->prenom }}</td>
+                                                <td>{{ $enseignant->user->email }}</td>
+                                               <td colspan="2">
+    @foreach ($enseignant->coursClassrooms() as $item)
+        <div class="mb-1">
+            <span class="badge badge-info">{{ $item->cours }}</span> → 
+            <span class="badge badge-secondary">{{ $item->classe }}</span>
+        </div>
+    @endforeach
+</td>
+
                                                 <td class="text-center">
+                                                    
                                                     <div class="d-grid g-4 d-md-flex justify-content-md-end">
-                                                        <button class="btn btn-sm btn-warning" 
-                                                            onclick="editEleve({{ json_encode($eleve) }}, {{ json_encode($eleve->user) }})" 
-                                                            data-toggle="modal" 
-                                                            data-target="#modalAddEditEleve">Modifier</button>
-                                                        &nbsp;&nbsp;&nbsp;&nbsp;
-                                                        <form action="{{ route('admin.eleves.destroy', $eleve->id) }}" method="POST" style="display:inline-block;">
+                                                        <button 
+    type="button" 
+    class="btn btn-sm btn-warning" 
+    data-toggle="modal" 
+    data-target="#modalAddEdit"
+    onclick='editEnseignant(@json($enseignant), @json($enseignant->cours->pluck("id")), @json($enseignant->classrooms->pluck("id")))'>
+    Modifier
+</button> &nbsp;&nbsp;&nbsp;
+                                                        <form action="{{ route('admin.enseignants.destroy', $enseignant->id) }}" method="POST" style="display:inline-block;">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger"
-                                                                onclick="return confirm('Supprimer cet élève ?')">Supprimer</button>
+                                                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Supprimer cet enseignant ?')">Supprimer</button>
+                                                            
                                                         </form>
                                                     </div>
                                                 </td>
@@ -66,15 +76,17 @@
                 </div>
             </div>
 
-            <!-- Modal Ajouter/Modifier Élève -->
-            <div class="modal fade" id="modalAddEditEleve" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+            <!-- Modal Ajouter/Modifier Enseignant -->
+            <div class="modal fade" id="modalAddEdit" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <form id="formEleve" method="POST" enctype="multipart/form-data">
+                    <form id="formEnseignant" method="POST">
                         @csrf
                         <input type="hidden" name="_method" id="_method" value="POST">
+                        <input type="hidden" name="_method" id="_method" value="POST">
+                        <input type="hidden" name="enseignant_id" id="enseignant_id">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="modalLabel">Ajouter/Modifier un élève</h5>
+                                <h5 class="modal-title" id="modalLabel">Ajouter un enseignant</h5>
                                 <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                             </div>
                             <div class="modal-body">
@@ -93,16 +105,20 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Classe</label>
-                                    <select name="classroom_id" id="classroom_id" class="form-control" required>
-                                        @foreach($classes as $class)
-                                            <option value="{{ $class->id }}">{{ $class->libelle }}</option>
+                                    <label>Cours</label>
+                                    <select name="cours[]" id="cours" class="form-control" multiple required>
+                                        @foreach($cours as $c)
+                                            <option value="{{ $c->id }}">{{ $c->libelle }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label>Justificatif (PDF/Image)</label>
-                                    <input type="file" name="justificatif" class="form-control">
+                                    <label>Classes</label>
+                                    <select name="classrooms[]" id="classrooms" class="form-control" multiple required>
+                                        @foreach($classrooms as $cl)
+                                            <option value="{{ $cl->id }}">{{ $cl->libelle }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -116,31 +132,39 @@
 
         </div>
     </div>
-
-    @push('scripts')
     <script>
-        function resetModal() {
-            document.getElementById("formEleve").reset();
-            document.getElementById("formEleve").action = "{{ route('admin.eleves.store') }}";
-            document.getElementById("_method").value = "POST";
-            document.getElementById("modalLabel").innerText = "Ajouter un élève";
-        }
+    function editEnseignant(enseignant, coursIds, classIds) {
+        // Remplir les champs du formulaire
+        $('#nom').val(enseignant.user.nom);
+        $('#prenom').val(enseignant.user.prenom);
+        $('#email').val(enseignant.user.email);
+        $('#telephone').val(enseignant.user.telephone);
+        $('#addresse').val(enseignant.user.addresse);
+        $('#date_naissance').val(enseignant.user.date_naissane);
+        $('#lieu').val(enseignant.user.lieu);
+        $('#sexe').val(enseignant.user.sexe);
+        $('#enseignant_id').val(enseignant.id);
 
-        function editEleve(eleve, user) {
-            document.getElementById("nom").value = user.nom;
-            document.getElementById("prenom").value = user.prenom;
-            document.getElementById("email").value = user.email;
-            document.getElementById("telephone").value = user.telephone;
-            document.getElementById("addresse").value = user.addresse;
-            document.getElementById("date_naissance").value = user.date_naissane;
-            document.getElementById("lieu").value = user.lieu;
-            document.getElementById("sexe").value = user.sexe;
-            document.getElementById("classroom_id").value = eleve.classroom_id;
+        // Sélectionner les options
+        $('#cours').val(coursIds).change();
+        $('#classrooms').val(classIds).change();
 
-            document.getElementById("formEleve").action = "/admin/eleves/" + eleve.id;
-            document.getElementById("_method").value = "PUT";
-            document.getElementById("modalLabel").innerText = "Modifier un élève";
-        }
-    </script>
-    @endpush
+        // Modifier l'action du formulaire
+        $('#formEnseignant').attr('action', `/admin/enseignants/${enseignant.id}`);
+        $('#_method').val('PUT');
+
+        $('#modalLabel').text("Modifier l'enseignant");
+    }
+
+    function resetModal() {
+        $('#formEnseignant')[0].reset();
+        $('#formEnseignant').attr('action', "{{ route('admin.enseignants.store') }}");
+        $('#_method').val('POST');
+        $('#enseignant_id').val('');
+        $('#cours').val([]).change();
+        $('#classrooms').val([]).change();
+        $('#modalLabel').text("Ajouter un enseignant");
+    }
+</script>
+
 </x-app-layout>

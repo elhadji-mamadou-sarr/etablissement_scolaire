@@ -17,4 +17,19 @@ class Eleve extends Model
     {
         return $this->belongsTo(Classroom::class);
     }
+
+    public function notes() {
+    return $this->hasMany(Note::class);
+}
+
+
+
+public function moyenneParMatiere($courId)
+{
+    return $this->notes()
+        ->where('cour_id', $courId)
+        ->avg('note'); // ou 'valeur' si ton champ s'appelle comme ça
+}
+
+
 }
