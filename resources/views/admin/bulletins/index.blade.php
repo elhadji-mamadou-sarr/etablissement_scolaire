@@ -8,6 +8,8 @@
                     <th class="px-4 py-2">Prénom</th>
                     <th class="px-4 py-2">Classe</th>
                     <th class="px-4 py-2">Action</th>
+                    <th class="px-4 py-2">Ac</th>
+
                 </tr>
             </thead>
             <tbody>
