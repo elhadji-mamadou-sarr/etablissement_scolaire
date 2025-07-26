@@ -22,7 +22,7 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table table-hover">
-                                    <thead>
+                                    <thead class="thead-dark">
                                         <tr class="table-active">
                                             <th>ID</th>
                                             <th>Nom</th>
@@ -39,25 +39,23 @@
                                                 <td>{{ $enseignant->user->nom }} {{ $enseignant->user->prenom }}</td>
                                                 <td>{{ $enseignant->user->email }}</td>
                                                <td colspan="2">
-    @foreach ($enseignant->coursClassrooms() as $item)
-        <div class="mb-1">
-            <span class="badge badge-info">{{ $item->cours }}</span> → 
-            <span class="badge badge-secondary">{{ $item->classe }}</span>
-        </div>
-    @endforeach
-</td>
-
+                                                    @foreach ($enseignant->coursClassrooms() as $item)
+                                                        <div class="mb-1">
+                                                            <span class="badge badge-info">{{ $item->cours }}</span> → 
+                                                            <span class="badge badge-secondary">{{ $item->classe }}</span>
+                                                        </div>
+                                                    @endforeach
+                                                </td>
                                                 <td class="text-center">
-                                                    
                                                     <div class="d-grid g-4 d-md-flex justify-content-md-end">
                                                         <button 
-    type="button" 
-    class="btn btn-sm btn-warning" 
-    data-toggle="modal" 
-    data-target="#modalAddEdit"
-    onclick='editEnseignant(@json($enseignant), @json($enseignant->cours->pluck("id")), @json($enseignant->classrooms->pluck("id")))'>
-    Modifier
-</button> &nbsp;&nbsp;&nbsp;
+                                                            type="button" 
+                                                            class="btn btn-sm btn-warning text-white" 
+                                                            data-toggle="modal" 
+                                                            data-target="#modalAddEdit"
+                                                            onclick='editEnseignant(@json($enseignant), @json($enseignant->cours->pluck("id")), @json($enseignant->classrooms->pluck("id")))'>
+                                                            Modifier
+                                                        </button> &nbsp;&nbsp;&nbsp;
                                                         <form action="{{ route('admin.enseignants.destroy', $enseignant->id) }}" method="POST" style="display:inline-block;">
                                                             @csrf
                                                             @method('DELETE')

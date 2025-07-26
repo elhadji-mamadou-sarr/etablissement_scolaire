@@ -7,9 +7,7 @@ use App\Models\Cour;
 use App\Models\Enseignant;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Storage;
 use App\Enums\UserRole;
 
 class EnseignantController extends Controller
@@ -60,16 +58,16 @@ class EnseignantController extends Controller
         ]);
 
        foreach ($request->cours as $cour_id) {
-    foreach ($request->classrooms as $classroom_id) {
-        \DB::table('enseignant_cour_classroom')->insert([
-            'enseignant_id' => $enseignant->id,
-            'cour_id' => $cour_id,
-            'classroom_id' => $classroom_id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
-    }
-}
+            foreach ($request->classrooms as $classroom_id) {
+                \DB::table('enseignant_cour_classroom')->insert([
+                    'enseignant_id' => $enseignant->id,
+                    'cour_id' => $cour_id,
+                    'classroom_id' => $classroom_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
 
         return redirect()->back()->with('success', 'Enseignant ajouté avec succès.');

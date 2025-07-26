@@ -25,14 +25,14 @@
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="example" class="table table-hover" style="width: 100%">
-                                    <thead>
+                                <table id="example" class="table table-striped table-hover" style="width: 100%">
+                                    <thead class="thead-dark">
                                         <tr class="table-active">
                                             <th>ID</th>
                                             <th>Libellé</th>
                                             <th>Description</th>
                                             <th>Cours associés</th>
-                                            <th class="float-right">Actions</th>
+                                            <th class="text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -48,7 +48,7 @@
                                                 </td>
                                                 <td class="text-center">
                                                     <div class="d-grid d-md-flex justify-content-md-end">
-                                                        <button class="btn btn-sm btn-warning"
+                                                        <button class="btn btn-sm btn-warning text-white"
                                                             onclick="editClassroom({{ $classroom }})"
                                                             data-toggle="modal"
                                                             data-target="#modalAddEdit">Modifier</button>

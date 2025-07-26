@@ -23,15 +23,15 @@
                         
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table id="example" class="table table-hover" style="width: 100%">
-                                    <thead>
+                                <table id="example" class="table table-striped table-hover" style="width: 100%">
+                                    <thead class="thead-dark">
                                         <tr class="table-active">
                                             <th>ID</th>
                                             <th>Libellé</th>
                                             <th>Crédit</th>
                                             <th>Volume</th>
                                             <th>Semestre</th>
-                                            <th class="float-right">Actions</th>
+                                            <th class="text-right">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -44,7 +44,7 @@
                                                 <td>{{ $cour->semestre }}</td>
                                                 <td class="text-center">
                                                     <div class="d-grid g-4 d-md-flex justify-content-md-end">
-                                                        <button class="btn btn-sm btn-warning" 
+                                                        <button class="btn btn-sm btn-warning text-white" 
                                                         onclick="editCour({{ $cour }})" 
                                                         data-toggle="modal" 
                                                         data-target="#modalAddEdit">Modifier</button>

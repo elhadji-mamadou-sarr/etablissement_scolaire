@@ -14,6 +14,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Enseignant\NoteController;
 use App\Http\Controllers\BulletinPreviewController;
 use App\Http\Controllers\AdminBulletinController;
+use App\Http\Controllers\BulletinController;
 
 Route::get('/', function () {
     return view('welcome');

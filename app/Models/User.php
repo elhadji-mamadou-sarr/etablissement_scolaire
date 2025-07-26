@@ -56,7 +56,6 @@ class User extends Authenticatable
         ];
     }
 
-
     // Méthodes pour vérifier les rôles
     public function isAdministrateur(): bool
     {
@@ -82,13 +81,16 @@ class User extends Authenticatable
     {
         return $this->role->label();
     }
-    public function eleve()
-{
-    return $this->hasOne(Eleve::class);
-}
 
-public function enseignant()
+    public function eleve()
+    {
+        return $this->hasOne(Eleve::class);
+    }
+
+    public function enseignant()
     {
         return $this->hasOne(Enseignant::class);
     }
+
+    
 }

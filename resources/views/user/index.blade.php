@@ -39,14 +39,14 @@
                 <div class="card-header"><h4 class="card-title">Liste des utilisateurs</h4></div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead class="table-light">
+                        <table class="table table-striped table-hover">
+                            <thead class="thead-dark">
                                 <tr class="table-active">
                                     <th>Nom</th>
                                     <th>Prénom</th>
                                     <th>Email</th>
                                     <th>Rôle</th>
-                                    <th class="float-right">Actions</th>
+                                    <th class="text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -58,7 +58,7 @@
                                     <td>{{ $user->getRoleLabel() }}</td>
                                     <td class="text-center">
                                         <div class="d-grid g-4 d-md-flex justify-content-md-end">
-                                            <button class="btn btn-sm btn-warning" onclick='editUser(@json($user))' data-toggle="modal" data-target="#modalUser">Modifier</button>
+                                            <button class="btn btn-sm btn-warning text-white" onclick='editUser(@json($user))' data-toggle="modal" data-target="#modalUser">Modifier</button>
                                             &nbsp; &nbsp; &nbsp;
                                             <form method="POST" action="{{ route('admin.users.destroy', $user) }}" class="d-inline" onsubmit="return confirm('Supprimer cet utilisateur ?')">
                                                 @csrf @method('DELETE')

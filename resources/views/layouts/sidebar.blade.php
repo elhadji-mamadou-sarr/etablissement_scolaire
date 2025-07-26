@@ -18,24 +18,31 @@
 
             {{-- Administrateur --}}
             @if(auth()->user()->role === UserRole::ADMINISTRATEUR)
-                <li><a href="{{ route('admin.users.index') }}">
-                    <i class="icon icon-single-04"></i>Utilisateurs</a>
-                </li>
-                <li><a href="{{ route('admin.classrooms.index') }}">
-                    <i class="icon icon-layout-25"></i>Classes</a>
-                </li>
-                <li><a href="{{ route('admin.cours.index') }}">
-                    <i class="icon icon-book-open"></i>Cours</a>
-                </li>
-                <li><a href="{{ route('admin.eleves.index') }}">
-                    <i class="icon icon-users"></i>Élèves</a>
-                </li>
-                <li><a href="{{ route('admin.enseignants.index') }}">
-                    <i class="icon icon-user"></i>Enseignants</a>
-                </li>
-              <a href="{{ route('admin.bulletins.index') }}">  {{-- ✅ Correct --}}
-    <i class="icon icon-docs"></i>Prévisualiser Bulletin
-</a>
+
+            <li><a href="{{ route('admin.users.index') }}">
+                <i class="icon icon-single-04"></i>Utilisateurs</a>
+            </li>
+            <li>
+                <a href="{{ route('admin.classrooms.index') }}">
+                <i class="icon icon-layout-25"></i>Classes</a>
+            </li>
+            <li>
+                <a href="{{ route('admin.cours.index') }}">
+                <i class="icon icon-globe-2"></i>Cours</a> 
+            </li>
+            <li>
+                <a href="{{ route('admin.eleves.index') }}">
+                <i class="icon icon-single-04"></i>Eleves</a>
+            </li>
+            <li>
+                <a href="{{ route('admin.enseignants.index') }}">
+                <i class="icon icon-user"></i>Enseignants</a>
+            </li>
+            <li>
+                <a href="{{ route('admin.bulletins.index') }}"> 
+                <i class="icon icon-layout-25"></i>Bulletins
+                </a>
+            </li>
 
 
             {{-- Enseignant --}}
@@ -46,9 +53,9 @@
                     </a>
                 </li>
                 <li>
-    <a href="{{ route('enseignant.notes.index') }}">
-        <i class="icon icon-book-open"></i>Notes
-    </a>
+        <a href="{{ route('enseignant.notes.index') }}">
+            <i class="icon icon-book-open"></i>Notes
+        </a>
 </li>
 
 

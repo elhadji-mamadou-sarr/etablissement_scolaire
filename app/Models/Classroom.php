@@ -23,12 +23,13 @@ class Classroom extends Model
     }
  
     public function enseignants()
-{
-    return $this->belongsToMany(Enseignant::class);
-}
-public function notes() {
-    return $this->hasMany(Note::class);
-}
+    {
+        return $this->belongsToMany(Enseignant::class);
+    }
+    
+    public function notes() {
+        return $this->hasMany(Note::class);
+    }
 
 
 }

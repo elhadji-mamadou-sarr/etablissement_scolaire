@@ -24,15 +24,15 @@ class Cour extends Model
     }
 
     public function enseignants()
-{
-    return $this->belongsToMany(Enseignant::class, 'enseignant_cour_classroom')
-        ->withPivot('classroom_id')
-        ->withTimestamps();
-}
+    {
+        return $this->belongsToMany(Enseignant::class, 'enseignant_cour_classroom')
+            ->withPivot('classroom_id')
+            ->withTimestamps();
+    }
 
-public function notes() {
-    return $this->hasMany(Note::class);
-}
+    public function notes() {
+        return $this->hasMany(Note::class);
+    }
 
 
 }

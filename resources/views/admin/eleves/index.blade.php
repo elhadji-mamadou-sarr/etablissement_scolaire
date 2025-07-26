@@ -22,8 +22,8 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
+                                <table class="table table-striped table-hover">
+                                    <thead class="thead-dark">
                                         <tr class="table-active">
                                             <th>ID</th>
                                             <th>Nom</th>
@@ -43,7 +43,7 @@
                                                 <td>{{ $eleve->matricule }}</td>
                                                 <td class="text-center">
                                                     <div class="d-grid g-4 d-md-flex justify-content-md-end">
-                                                        <button class="btn btn-sm btn-warning" 
+                                                        <button class="btn btn-sm btn-warning text-white" 
                                                             onclick="editEleve({{ json_encode($eleve) }}, {{ json_encode($eleve->user) }})" 
                                                             data-toggle="modal" 
                                                             data-target="#modalAddEditEleve">Modifier</button>
