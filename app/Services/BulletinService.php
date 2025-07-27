@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\Eleve;
 use App\Models\Note;
 
-
 class BulletinService
 {
 
@@ -109,7 +108,11 @@ class BulletinService
 
 
 
-
+    public function genererPdfBulletin(array $bulletinData)
+    {
+        $pdf = PDF::loadView('pdf.bulletin', $bulletinData);
+        return $pdf->download('bulletin-'.$bulletinData['eleve']->user->nom.'-'.$bulletinData['semestre'].'.pdf');
+    }
 
 
 

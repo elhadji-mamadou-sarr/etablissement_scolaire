@@ -11,8 +11,7 @@
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                {{-- <a href="{{ route('admin.bulletins.export', ['eleve' => $eleve->id, 'semestre' => $semestre]) }}"  --}}
-                   <a class="btn btn-success">
+                <a href="{{ route('admin.bulletins.download', ['eleve' => $eleve->id, 'semestre' => $semestre]) }}" class="btn btn-info">
                     <i class="fas fa-file-export"></i> Exporter PDF
                 </a>
             </div>
@@ -25,10 +24,12 @@
                         <div class="card-header">
                             <h5 class="card-title">Détail des notes</h5>
                             <div class="card-tools">
-                                <span class="badge bg-primary">Moyenne: {{ $bulletin['statistiques']['moyenne_generale'] }}</span>
-                                <span class="badge bg-{{ $bulletin['statistiques']['mention'] === 'Insuffisant' ? 'danger' : 'success' }}">
-                                    {{ $bulletin['statistiques']['mention'] }}
-                                </span>
+                                <a href="{{ route('admin.bulletins.download', ['eleve' => $eleve->id, 'semestre' => $semestre]) }}" class="btn btn-rounded btn-info">
+                                    <span class="btn-icon-left text-warning">
+                                        <i class="fa fa-download color-info"></i>
+                                    </span>
+                                    Télécharger
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">

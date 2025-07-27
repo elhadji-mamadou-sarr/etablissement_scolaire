@@ -53,16 +53,16 @@
                     </a>
                 </li>
                 <li>
-        <a href="{{ route('enseignant.notes.index') }}">
-            <i class="icon icon-book-open"></i>Notes
-        </a>
-</li>
+                    <a href="{{ route('enseignant.notes.index') }}">
+                        <i class="icon icon-book-open"></i>Notes
+                    </a>
+                </li>
 
 
             {{-- Élève / Parent --}}
             @elseif(auth()->user()->role === UserRole::ELEVE_PARENT)
                 <li>
-                    <a href="{{ route('eleve.bulletins') }}">
+                    <a href="{{ route('eleve-parent.bulletins') }}">
                         <i class="icon icon-docs"></i>Mes bulletins
                     </a>
                 </li>

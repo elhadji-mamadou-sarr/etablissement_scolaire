@@ -6,6 +6,7 @@ use App\Models\Classroom;
 use App\Models\Eleve;
 use App\Models\Note;
 use App\Services\BulletinService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 
@@ -37,6 +38,7 @@ class BulletinPreviewController extends Controller
     }
 
     
+   
 
     public function show($eleveId, $semestre, BulletinService $service)
     {
@@ -101,4 +103,49 @@ class BulletinPreviewController extends Controller
 
         return back()->with('success', 'Note mise à jour');
     }
+
+
+    public function downloadPdf($eleve, $semestre, BulletinService $service)
+    {
+
+        $bulletin = $service->genererBulletinComplet($eleve, $semestre);
+
+        if (!$bulletin) {
+            return redirect()
+                ->route('eleve-parent.bulletins')
+                ->with('error', 'Aucune note disponible pour ce semestre');
+        }
+
+        $eleve = $bulletin['eleve'];
+        
+        // Génération du nom de fichier
+        $fileName = 'bulletin_' . 
+                   strtolower(str_replace(' ', '_', $eleve->user->nom)) . '_' .
+                   strtolower(str_replace(' ', '_', $eleve->user->prenom)) . '_' .
+                   strtolower(str_replace(' ', '_', $semestre)) . '_' .
+                   now()->format('Y_m_d') . '.pdf';
+
+        // Configuration du PDF
+        $pdf = Pdf::loadView('pdf.bulletin', [
+            'bulletin' => $bulletin,
+            'eleve' => $eleve,
+            'semestre' => $semestre
+        ]);
+
+        // Options du PDF
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->setOptions([
+            'dpi' => 150,
+            'defaultFont' => 'Arial',
+            'isRemoteEnabled' => true,
+            'isHtml5ParserEnabled' => true,
+            'chroot' => public_path(),
+        ]);
+
+        // Téléchargement du PDF
+        return $pdf->download($fileName);
+    }
+
+
+
 }

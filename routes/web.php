@@ -53,15 +53,16 @@ Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin
     Route::resource('enseignants', EnseignantController::class);
     Route::get('bulletins', [AdminBulletinController::class, 'index'])->name('bulletins.index');
     Route::get('/bulletins/{eleve}/{semestre}', [BulletinPreviewController::class, 'show'])
-    ->name('bulletins.preview');
-    
+        ->name('bulletins.preview');
 
+    Route::get('/bulletins/download/{eleve}/{semestre}', [BulletinPreviewController::class, 'downloadPdf'])
+        ->name('bulletins.download');
 
-    
-    
 
 
 });
+
+
 
 // Routes Enseignant
 Route::middleware(['auth', 'role:enseignant'])->prefix('enseignant')->name('enseignant.')->group(function () {
@@ -73,7 +74,14 @@ Route::middleware(['auth', 'role:enseignant'])->prefix('enseignant')->name('ense
 // Routes Élève/Parent
 Route::middleware(['auth', 'role:eleve_parent'])->prefix('eleve-parent')->name('eleve-parent.')->group(function () {
     Route::get('/dashboard', [EleveParentController::class, 'dashboard'])->name('dashboard');
+    Route::get('/bulletins', [EleveParentController::class, 'bulletins']) ->name('bulletins');
+    Route::get('/bulletins/{semestre}', [EleveParentController::class, 'show']) ->name('show');
+
+    Route::get('/bulletins/download/{semestre}', [EleveParentController::class, 'downloadPdf']) ->name('bulletins.download');
 });
+
+
+
 
 
 
