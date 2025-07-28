@@ -1,20 +1,56 @@
 <?php
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Api\BulletinApiController;
 use App\Http\Controllers\Api\ClassroomController;
 use App\Http\Controllers\Api\CourController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\EleveApiController;
+use App\Http\Controllers\Api\EnseignantApiController;
+use App\Http\Controllers\Api\UserApiController;
+use App\Http\Controllers\Api\NoteController;
 
+// ✅ Routes publiques
+Route::post('/login', function (Request $request) {
+$credentials = $request->validate([
+'email' => 'required|email',
+'password' => 'required',
+]);
 
-Route::name('api.')->group( function() {
-    Route::apiResource('classes', ClassroomController::class);
+if (!Auth::attempt($credentials)) {
+return response()->json(['message' => 'Invalid credentials'], 401);
+}
 
-    Route::get('classes/{classroom}/cours', [ClassroomController::class, 'listCours']);
+$user = $request->user();
+$token = $user->createToken('api-token')->plainTextToken;
 
-    Route::post('classes/{classroom}/cours/attach', [ClassroomController::class, 'attachCour']);
-
-    Route::post('classes/{classroom}/cours/detach', [ClassroomController::class, 'detachCour']);
-
-
-    Route::apiResource('cours', CourController::class);
+return response()->json([
+'user' => $user,
+'token' => $token
+]);
 });
 
+// ✅ Route de logout protégée
+Route::middleware('auth:sanctum')->post('/logout', function (Request $request) {
+$request->user()->currentAccessToken()->delete();
+return response()->json(['message' => 'Déconnecté avec succès']);
+});
+
+// ✅ Toutes les routes protégées par Sanctum ici
+Route::middleware('auth:sanctum')->name('api.')->group(function () {
+Route::apiResource('classes', ClassroomController::class);
+Route::get('classes/{classroom}/cours', [ClassroomController::class, 'listCours']);
+Route::post('classes/{classroom}/cours/attach', [ClassroomController::class, 'attachCour']);
+Route::post('classes/{classroom}/cours/detach', [ClassroomController::class, 'detachCour']);
+
+Route::apiResource('cours', CourController::class);
+Route::apiResource('eleves', EleveApiController::class);
+Route::apiResource('users', UserApiController::class);
+Route::apiResource('enseignants', EnseignantApiController::class);
+Route::apiResource('notes', NoteController::class);
+
+Route::get('bulletins', [BulletinApiController::class, 'index']); // ?classe=1&semestre=Semestre 1
+Route::get('bulletins/{eleve}/{semestre}', [BulletinApiController::class, 'show']);
+Route::post('bulletins/note', [BulletinApiController::class, 'storeNote']);
+Route::put('bulletins/note/{id}', [BulletinApiController::class, 'updateNote']);
+});

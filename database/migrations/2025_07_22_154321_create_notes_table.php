@@ -25,8 +25,8 @@ return new class extends Migration
 
             // Contrainte unique pour limiter à 2 notes par type/semestre
             $table->unique([
-                'eleve_id', 
-                'cour_id', 
+                'eleve_id',
+                'cour_id',
                 'semestre',
                 'type_note'
             ], 'note_unique_per_type');
@@ -42,5 +42,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('notes');
+
     }
 };

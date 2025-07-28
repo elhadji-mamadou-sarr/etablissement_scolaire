@@ -1,33 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Models\Classroom;
-use App\Models\Cour;
+use App\Http\Controllers\Controller;
 use App\Models\Enseignant;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Enums\UserRole;
 
-class EnseignantController extends Controller
+class EnseignantApiController extends Controller
 {
     public function index()
     {
-        $enseignants = Enseignant::with('user')->get();
-        $classrooms = Classroom::all();
-        $cours = Cour::all();
-
-        return view('admin.enseignants.index', compact('enseignants', 'classrooms', 'cours'));
+        $enseignants = Enseignant::with(['user', 'classrooms', 'cours'])->get();
+        return response()->json($enseignants);
     }
 
-    public function dashboard()
-    {
-        return view('enseignant.dashboard');
-    }
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -41,14 +34,14 @@ class EnseignantController extends Controller
         ]);
 
         $user = User::create([
-            'nom' => $request->nom,
-            'prenom' => $request->prenom,
-            'email' => $request->email,
-            'telephone' => $request->telephone,
-            'addresse' => $request->addresse,
-            'date_naissane' => $request->date_naissance,
-            'lieu' => $request->lieu,
-            'sexe' => $request->sexe,
+            'nom' => $validated['nom'],
+            'prenom' => $validated['prenom'],
+            'email' => $validated['email'],
+            'telephone' => $validated['telephone'],
+            'addresse' => $validated['addresse'],
+            'date_naissane' => $validated['date_naissance'],
+            'lieu' => $validated['lieu'],
+            'sexe' => $validated['sexe'],
             'password' => bcrypt('0000'),
             'role' => UserRole::ENSEIGNANT,
         ]);
@@ -57,9 +50,9 @@ class EnseignantController extends Controller
             'user_id' => $user->id,
         ]);
 
-        foreach ($request->cours as $cour_id) {
-            foreach ($request->classrooms as $classroom_id) {
-                \DB::table('enseignant_cour_classroom')->insert([
+        foreach ($validated['cours'] as $cour_id) {
+            foreach ($validated['classrooms'] as $classroom_id) {
+                DB::table('enseignant_cour_classroom')->insert([
                     'enseignant_id' => $enseignant->id,
                     'cour_id' => $cour_id,
                     'classroom_id' => $classroom_id,
@@ -69,8 +62,7 @@ class EnseignantController extends Controller
             }
         }
 
-
-        return redirect()->back()->with('success', 'Enseignant ajouté avec succès.');
+        return response()->json($enseignant->load(['user', 'classrooms', 'cours']), 201);
     }
 
     public function destroy(Enseignant $enseignant)
@@ -80,8 +72,6 @@ class EnseignantController extends Controller
         $enseignant->user->delete();
         $enseignant->delete();
 
-        return redirect()->back()->with('success', 'Enseignant supprimé avec succès.');
+        return response()->json(['message' => 'Enseignant supprimé avec succès']);
     }
-
-
 }

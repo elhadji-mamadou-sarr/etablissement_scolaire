@@ -17,8 +17,7 @@ return new class extends Migration
             $table->foreignId('cour_id')->constrained()->onDelete('cascade');
             $table->foreignId('classroom_id')->constrained()->onDelete('cascade');
             $table->timestamps();
-
-            $table->unique(['enseignant_id', 'cour_id', 'classroom_id']);
+            $table->unique(['enseignant_id', 'cour_id', 'classroom_id'], 'enseignant_cour_clr');
         });
 
     }
@@ -29,5 +28,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('enseignant_cour_classroom');
+
     }
 };

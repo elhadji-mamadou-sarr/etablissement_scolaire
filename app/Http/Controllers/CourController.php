@@ -15,7 +15,7 @@ class CourController extends Controller
     {
         $cours = Cour::with('classrooms')->get();
 
-       return view('cours.index', ['cours' => $cours]);
+        return view('cours.index', ['cours' => $cours]);
     }
 
     /**
