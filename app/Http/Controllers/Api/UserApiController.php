@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserApiController extends Controller
 {
@@ -20,7 +21,7 @@ class UserApiController extends Controller
     public function store(UserRequest $request)
     {
         $data = $request->validated();
-        $data['password'] = bcrypt('0000');
+        $data['password'] = Hash::make("0000");
         $user = User::create($data);
 
         return response()->json($user, 201);
