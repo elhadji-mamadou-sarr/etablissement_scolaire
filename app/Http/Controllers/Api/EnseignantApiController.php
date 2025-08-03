@@ -75,4 +75,6 @@ class EnseignantApiController extends Controller
 
         return response()->json(['message' => 'Enseignant supprimé avec succès']);
     }
+
+    
 }

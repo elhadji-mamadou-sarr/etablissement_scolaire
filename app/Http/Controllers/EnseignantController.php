@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Enums\UserRole;
+use Illuminate\Support\Facades\Auth;
 
 class EnseignantController extends Controller
 {
@@ -82,6 +83,27 @@ class EnseignantController extends Controller
 
         return redirect()->back()->with('success', 'Enseignant supprimé avec succès.');
     }
+   
+    
+
+public function mesCours()
+{
+    $user = Auth::user();
+
+    // Vérifie que c'est bien un enseignant
+    if (!$user->enseignant) {
+        abort(403, "Vous n'êtes pas un enseignant.");
+    }
+
+    $enseignant = $user->enseignant;
+
+    // Récupère les cours avec les classes
+    $coursClassrooms = $enseignant->coursClassrooms(); // méthode déjà définie dans le modèle
+
+    return view('enseignant.cours.index', [
+        'coursClassrooms' => $coursClassrooms
+    ]);
+}
 
 
 }

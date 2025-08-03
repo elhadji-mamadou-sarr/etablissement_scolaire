@@ -50,8 +50,13 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
 
     Route::apiResource('enseignants', EnseignantApiController::class);
     Route::apiResource('notes', NoteController::class);
+<<<<<<< HEAD
 
     Route::get('bulletins', [BulletinApiController::class, 'index']);
+=======
+    
+    Route::get('bulletins', [BulletinApiController::class, 'index']); // ?classe=1&semestre=Semestre 1
+>>>>>>> 03c082e (Ajout de la page 'Mes cours' pour les enseignants)
     Route::get('bulletins/{eleve}/{semestre}', [BulletinApiController::class, 'show']);
     Route::post('bulletins/note', [BulletinApiController::class, 'storeNote']);
     Route::put('bulletins/note/{id}', [BulletinApiController::class, 'updateNote']);

@@ -76,8 +76,9 @@
 
                 <!-- Page Content -->
                 <main>
-                    {{ $slot }}
-                </main>
+    @yield('content')  {{-- ✅ Correct pour @extends --}}
+</main>
+
         
             </div>
         </div>
