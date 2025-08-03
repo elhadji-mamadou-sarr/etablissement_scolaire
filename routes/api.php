@@ -51,7 +51,7 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::apiResource('enseignants', EnseignantApiController::class);
     Route::apiResource('notes', NoteController::class);
 
-    Route::get('bulletins', [BulletinApiController::class, 'index']); // ?classe=1&semestre=Semestre 1
+    Route::get('bulletins', [BulletinApiController::class, 'index']);
     Route::get('bulletins/{eleve}/{semestre}', [BulletinApiController::class, 'show']);
     Route::post('bulletins/note', [BulletinApiController::class, 'storeNote']);
     Route::put('bulletins/note/{id}', [BulletinApiController::class, 'updateNote']);

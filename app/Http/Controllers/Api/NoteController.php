@@ -9,7 +9,45 @@ class NoteController extends Controller
 {
     public function index()
     {
-        return Note::with(['eleve', 'cour', 'classroom', 'enseignant'])->get();
+        $user = auth()->user();
+        
+        if (!$user->isEnseignant()) {
+            return response()->json([
+                'message' => 'Accès réservé aux enseignants'
+            ], 403);
+        }
+    
+        $enseignant = $user->enseignant;
+    
+        // Récupérer les données avec les mêmes filtres
+        $notes = $enseignant->notes()
+                         ->with(['eleve.user', 'cour', 'classroom'])
+                         ->when(request('classe'), function($q, $classe) {
+                             return $q->where('classroom_id', $classe);
+                         })
+                         ->when(request('cours'), function($q, $cours) {
+                             return $q->where('cour_id', $cours);
+                         })
+                         ->when(request('semestre'), function($q, $semestre) {
+                             return $q->where('semestre', $semestre);
+                         })
+                         ->latest()
+                         ->get();
+    
+       
+        // Récupérer les options de filtre
+        $filters = [
+            'classes' => $enseignant->classrooms->map(function($classroom) {
+                return ['id' => $classroom->id, 'libelle' => $classroom->libelle];
+            }),
+            'cours' => $enseignant->cours->map(function($cour) {
+                return ['id' => $cour->id, 'libelle' => $cour->libelle];
+            }),
+            'semestres' => ['Semestre 1', 'Semestre 2'] // Vous pouvez adapter selon votre système
+        ];
+    
+            
+        return $notes;
     }
 
     public function store(Request $request)
