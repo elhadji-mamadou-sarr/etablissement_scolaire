@@ -22,9 +22,26 @@ class EnseignantController extends Controller
     }
 
     public function dashboard()
-    {
-        return view('enseignant.dashboard');
-    }
+{
+    $enseignant = Enseignant::where('user_id', auth()->id())->first();
+
+    $cours = \DB::table('enseignant_cour_classroom')
+        ->join('cours', 'enseignant_cour_classroom.cour_id', '=', 'cours.id')
+        ->where('enseignant_id', $enseignant->id)
+        ->select('cours.libelle')
+        ->distinct()
+        ->pluck('libelle');
+
+    $classrooms = \DB::table('enseignant_cour_classroom')
+        ->join('classrooms', 'enseignant_cour_classroom.classroom_id', '=', 'classrooms.id')
+        ->where('enseignant_id', $enseignant->id)
+        ->select('classrooms.libelle')
+        ->distinct()
+        ->pluck('libelle');
+
+    return view('enseignant.dashboard', compact('cours', 'classrooms'));
+}
+
     public function store(Request $request)
     {
         $request->validate([
