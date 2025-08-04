@@ -67,7 +67,8 @@ Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin
 // Routes Enseignant
 Route::middleware(['auth', 'role:enseignant'])->prefix('enseignant')->name('enseignant.')->group(function () {
     Route::get('/dashboard', [EnseignantController::class, 'dashboard'])->name('dashboard');
-    
+    Route::get('/cours', [EnseignantController::class, 'mesCours'])->name('cours');
+
    Route::resource('notes', NoteController::class);
 });
 

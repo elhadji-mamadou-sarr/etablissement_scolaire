@@ -23,11 +23,28 @@ class EnseignantController extends Controller
         return view('admin.enseignants.index', compact('enseignants', 'classrooms', 'cours'));
     }
 
-    public function dashboard()
-    {
-        return view('enseignant.dashboard');
-    }
 
+   public function dashboard(){
+
+    $enseignant = Enseignant::where('user_id', auth()->id())->first();
+
+    $cours = \DB::table('enseignant_cour_classroom')
+        ->join('cours', 'enseignant_cour_classroom.cour_id', '=', 'cours.id')
+        ->where('enseignant_id', $enseignant->id)
+        ->select('cours.libelle')
+        ->distinct()
+        ->pluck('libelle');
+
+    $classrooms = \DB::table('enseignant_cour_classroom')
+        ->join('classrooms', 'enseignant_cour_classroom.classroom_id', '=', 'classrooms.id')
+        ->where('enseignant_id', $enseignant->id)
+        ->select('classrooms.libelle')
+        ->distinct()
+        ->pluck('libelle');
+
+    return view('enseignant.dashboard', compact('cours', 'classrooms'));
+}
+    
 
     public function store(EnseignantRequest $request)
     {
@@ -108,6 +125,27 @@ class EnseignantController extends Controller
         $enseignant->delete();
 
         return redirect()->back()->with('success', 'Enseignant supprimé avec succès.');
+    }
+   
+    
+
+    public function mesCours()
+    {
+        $user = Auth::user();
+
+        // Vérifie que c'est bien un enseignant
+        if (!$user->enseignant) {
+            abort(403, "Vous n'êtes pas un enseignant.");
+        }
+
+        $enseignant = $user->enseignant;
+
+        // Récupère les cours avec les classes
+        $coursClassrooms = $enseignant->coursClassrooms(); // méthode déjà définie dans le modèle
+
+        return view('enseignant.cours.index', [
+            'coursClassrooms' => $coursClassrooms
+        ]);
     }
 
 
