@@ -57,6 +57,12 @@
                         <i class="icon icon-book-open"></i>Notes
                     </a>
                 </li>
+                 <li>
+    <a href="{{ route('enseignant.cours') }}">
+        <i class="icon icon-book-open"></i>Mes cours
+    </a>
+</li>
+
 
 
             {{-- Élève / Parent --}}

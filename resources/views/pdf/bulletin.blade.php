@@ -329,7 +329,7 @@
     </div>
     
     <div class="footer">
-        <p>Document généré automatiquement le {{ now()->format('d/m/Y à H:i') }}</p>
+        <p>Document généré le {{ now()->format('d/m/Y à H:i') }}</p>
         <p>Système de gestion scolaire - Bulletin officiel</p>
     </div>
 </body>

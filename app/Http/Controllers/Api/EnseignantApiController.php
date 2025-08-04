@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use App\Enums\UserRole;
+use Illuminate\Support\Facades\Hash;
 
 class EnseignantApiController extends Controller
 {
@@ -42,7 +43,7 @@ class EnseignantApiController extends Controller
             'date_naissane' => $validated['date_naissance'],
             'lieu' => $validated['lieu'],
             'sexe' => $validated['sexe'],
-            'password' => bcrypt('0000'),
+            'password' => Hash::make("0000"),
             'role' => UserRole::ENSEIGNANT,
         ]);
 
@@ -74,4 +75,6 @@ class EnseignantApiController extends Controller
 
         return response()->json(['message' => 'Enseignant supprimé avec succès']);
     }
+
+    
 }

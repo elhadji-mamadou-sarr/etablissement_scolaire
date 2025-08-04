@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Enums\UserRole;
+use Illuminate\Support\Facades\Auth;
 
 class EnseignantController extends Controller
 {
@@ -21,7 +22,11 @@ class EnseignantController extends Controller
         return view('admin.enseignants.index', compact('enseignants', 'classrooms', 'cours'));
     }
 
+<<<<<<< HEAD
    public function dashboard()
+=======
+    public function dashboard()
+>>>>>>> 95108481e75548f3db9fbe96237b47447cbd8715
 {
     $enseignant = Enseignant::where('user_id', auth()->id())->first();
 
@@ -41,6 +46,10 @@ class EnseignantController extends Controller
 
     return view('enseignant.dashboard', compact('cours', 'classrooms'));
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 95108481e75548f3db9fbe96237b47447cbd8715
     public function store(Request $request)
     {
         $request->validate([
@@ -98,6 +107,27 @@ class EnseignantController extends Controller
 
         return redirect()->back()->with('success', 'Enseignant supprimé avec succès.');
     }
+   
+    
+
+public function mesCours()
+{
+    $user = Auth::user();
+
+    // Vérifie que c'est bien un enseignant
+    if (!$user->enseignant) {
+        abort(403, "Vous n'êtes pas un enseignant.");
+    }
+
+    $enseignant = $user->enseignant;
+
+    // Récupère les cours avec les classes
+    $coursClassrooms = $enseignant->coursClassrooms(); // méthode déjà définie dans le modèle
+
+    return view('enseignant.cours.index', [
+        'coursClassrooms' => $coursClassrooms
+    ]);
+}
 
 
 }

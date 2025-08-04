@@ -104,4 +104,8 @@
         });
     </script>
     @endpush
+<<<<<<< HEAD
 </x-app-layout>
+=======
+</x-app-layout>
+>>>>>>> 95108481e75548f3db9fbe96237b47447cbd8715

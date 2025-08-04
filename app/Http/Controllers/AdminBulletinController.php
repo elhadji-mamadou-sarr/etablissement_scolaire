@@ -15,7 +15,6 @@ class AdminBulletinController extends Controller{
     }
 
 
-
     public function preview($eleveId)
     {
         $semestre = 'S1'; 
@@ -61,5 +60,6 @@ class AdminBulletinController extends Controller{
 
         return view('admin.bulletins.preview', compact('eleve', 'semestre', 'bulletin'));
     }
+    
 
 }

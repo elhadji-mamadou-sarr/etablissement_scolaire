@@ -51,14 +51,13 @@ Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin
     Route::resource('users', UserController::class);
     Route::resource('eleves', EleveController::class);
     Route::resource('enseignants', EnseignantController::class);
+
     Route::get('bulletins', [AdminBulletinController::class, 'index'])->name('bulletins.index');
     Route::get('/bulletins/{eleve}/{semestre}', [BulletinPreviewController::class, 'show'])
         ->name('bulletins.preview');
 
     Route::get('/bulletins/download/{eleve}/{semestre}', [BulletinPreviewController::class, 'downloadPdf'])
         ->name('bulletins.download');
-
-
 
 });
 
@@ -67,7 +66,8 @@ Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin
 // Routes Enseignant
 Route::middleware(['auth', 'role:enseignant'])->prefix('enseignant')->name('enseignant.')->group(function () {
     Route::get('/dashboard', [EnseignantController::class, 'dashboard'])->name('dashboard');
-    
+    Route::get('/cours', [EnseignantController::class, 'mesCours'])->name('cours');
+
    Route::resource('notes', NoteController::class);
 });
 
