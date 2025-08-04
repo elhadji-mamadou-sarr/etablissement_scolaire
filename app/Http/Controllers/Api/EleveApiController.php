@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\EleveRequest;
 use App\Models\Eleve;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -49,7 +48,7 @@ class EleveApiController extends Controller
             'email' => $validated['email'],
             'telephone' => $validated['telephone'],
             'addresse' => $validated['addresse'],
-            'date_naissane' => $validated['date_naissance'],
+            'date_naissance' => $validated['date_naissance'],
             'lieu' => $validated['lieu'],
             'sexe' => $validated['sexe'],
             'password' => bcrypt('0000'),
@@ -68,10 +67,20 @@ class EleveApiController extends Controller
 
     public function update(Request $request, Eleve $eleve)
     {
+        $eleve->load('user');
+
+        if (!$eleve->user) {
+            return response()->json(['message' => 'Utilisateur associé non trouvé.'], 404);
+        }
+
         $validated = $request->validate([
             'nom' => 'required',
             'prenom' => 'required',
-            'email' => 'required|email|unique:users,email,' . $eleve->user_id,
+            'email' => [
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($eleve->user->id),
+            ],
             'telephone' => 'required',
             'addresse' => 'required',
             'date_naissance' => 'required|date',
@@ -81,9 +90,7 @@ class EleveApiController extends Controller
             'justificatif' => 'nullable|file|mimes:pdf,jpg,jpeg,png'
         ]);
 
-        $eleve->load('user');
-
-        $path = $eleve->user->justificatif_path ?? null;
+        $path = $eleve->user->justificatif_path;
 
         if ($request->hasFile('justificatif')) {
             if ($path) {
@@ -98,7 +105,7 @@ class EleveApiController extends Controller
             'email' => $validated['email'],
             'telephone' => $validated['telephone'],
             'addresse' => $validated['addresse'],
-            'date_naissane' => $validated['date_naissance'],
+            'date_naissance' => $validated['date_naissance'],
             'lieu' => $validated['lieu'],
             'sexe' => $validated['sexe'],
             'justificatif_path' => $path,
