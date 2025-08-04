@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Enseignant;
 use App\Models\Note;
 use Illuminate\Http\Request;
 
@@ -47,7 +48,12 @@ class NoteController extends Controller
         ];
     
             
-        return $notes;
+        return response()->json([
+            'notes' => $notes,
+            'cours' => $enseignant->cours,
+            'classes' => $enseignant->classrooms
+        ]);
+        
     }
 
     public function store(Request $request)
@@ -56,7 +62,7 @@ class NoteController extends Controller
             'eleve_id' => 'required|exists:eleves,id',
             'cour_id' => 'required|exists:cours,id',
             'classroom_id' => 'required|exists:classrooms,id',
-            'enseignant_id' => 'required|exists:enseignants,id',
+            'enseignant_id' => 'nullable|exists:enseignants,id',
             'note' => 'required|numeric|min:0|max:20',
             'semestre' => 'required|string',
             'type_note' => 'required|string',
@@ -65,8 +71,19 @@ class NoteController extends Controller
             'commentaire' => 'nullable|string',
         ]);
 
+        $validated['enseignant_id'] = auth()->user()->id;
+
         return Note::create($validated);
     }
+
+
+    public function findCoursByEnseignant(Enseignant $enseignant){
+
+        return response()->json([
+            'cours' => $enseignant->cours
+        ]);
+    }
+
 
     public function show(Note $note)
     {

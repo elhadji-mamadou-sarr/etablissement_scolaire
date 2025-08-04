@@ -51,6 +51,7 @@ Route::middleware(['auth', 'role:administrateur'])->prefix('admin')->name('admin
     Route::resource('users', UserController::class);
     Route::resource('eleves', EleveController::class);
     Route::resource('enseignants', EnseignantController::class);
+    Route::post('/enseignants/{enseignant}', [EnseignantController::class, 'update']);
 
     Route::get('bulletins', [AdminBulletinController::class, 'index'])->name('bulletins.index');
     Route::get('/bulletins/{eleve}/{semestre}', [BulletinPreviewController::class, 'show'])

@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Enums\UserRole;
+use App\Http\Requests\EnseignantRequest;
+use Illuminate\Support\Facades\Hash;
 
 class EnseignantController extends Controller
 {
@@ -25,21 +27,10 @@ class EnseignantController extends Controller
     {
         return view('enseignant.dashboard');
     }
-    public function store(Request $request)
-    {
-        $request->validate([
-            'nom' => 'required',
-            'prenom' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'telephone' => 'required',
-            'addresse' => 'required',
-            'date_naissance' => 'required|date',
-            'lieu' => 'required',
-            'sexe' => ['required', Rule::in(['M', 'F'])],
-            'cours' => 'required|array',
-            'classrooms' => 'required|array'
-        ]);
 
+
+    public function store(EnseignantRequest $request)
+    {
         $user = User::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
@@ -49,7 +40,7 @@ class EnseignantController extends Controller
             'date_naissane' => $request->date_naissance,
             'lieu' => $request->lieu,
             'sexe' => $request->sexe,
-            'password' => bcrypt('0000'),
+            'password' => Hash::make("0000"),
             'role' => UserRole::ENSEIGNANT,
         ]);
 
@@ -69,9 +60,45 @@ class EnseignantController extends Controller
             }
         }
 
-
         return redirect()->back()->with('success', 'Enseignant ajouté avec succès.');
     }
+    
+
+    public function update(EnseignantRequest $request, Enseignant $enseignant ) {
+
+        $user = $enseignant->user;
+    
+        $user->update([
+            'nom' => $request->nom,
+            'prenom' => $request->prenom,
+            'email' => $request->email,
+            'telephone' => $request->telephone,
+            'addresse' => $request->addresse,
+            'date_naissane' => $request->date_naissance,
+            'lieu' => $request->lieu,
+            'sexe' => $request->sexe,
+        ]);
+    
+        // Supprimer les anciennes relations
+        \DB::table('enseignant_cour_classroom')
+            ->where('enseignant_id', $enseignant->id)
+            ->delete();
+
+        foreach ($request->cours as $cour_id) {
+            foreach ($request->classrooms as $classroom_id) {
+                \DB::table('enseignant_cour_classroom')->insert([
+                    'enseignant_id' => $enseignant->id,
+                    'cour_id' => $cour_id,
+                    'classroom_id' => $classroom_id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'Enseignant modifié avec succès.');
+    }
+
 
     public function destroy(Enseignant $enseignant)
     {
