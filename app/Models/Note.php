@@ -32,7 +32,7 @@ class Note extends Model
             // Vérification que l'enseignant peut noter ce cours
             $canTeach = \DB::table('enseignant_cour_classroom')
                 ->where('enseignant_id', $note->enseignant_id)
-                ->where('cour_id', $note->cour_id)
+                // ->where('cour_id', $note->cour_id)
                 ->where('classroom_id', $note->classroom_id)
                 ->exists();
 

@@ -6,10 +6,9 @@ use App\Models\Classroom;
 use App\Models\Cour;
 use App\Models\Enseignant;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use App\Enums\UserRole;
 use App\Http\Requests\EnseignantRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class EnseignantController extends Controller
@@ -144,7 +143,7 @@ class EnseignantController extends Controller
         $coursClassrooms = $enseignant->coursClassrooms(); // méthode déjà définie dans le modèle
 
         return view('enseignant.cours.index', [
-            'coursClassrooms' => $coursClassrooms
+            'classes' => $coursClassrooms
         ]);
     }
 

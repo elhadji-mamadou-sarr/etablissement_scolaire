@@ -6,13 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Note;
 use App\Models\Eleve;
-use App\Models\Cour;
-use App\Models\Classroom;
-use App\Models\Enseignant;
-use Illuminate\Support\Facades\DB;
 
 class NoteController extends Controller
 {
+
     public function index()
     {
         $user = auth()->user();
@@ -20,22 +17,22 @@ class NoteController extends Controller
         if (!$user->isEnseignant()) {
             abort(403, 'Accès réservé aux enseignants');
         }
-
+        
         $enseignant = $user->enseignant;
-
+        
         // Récupérer les classes de l'enseignant
         $classroomIds = $enseignant->classrooms()->pluck('classrooms.id');
-     
+        
         // Récupérer les élèves de ces classes
         $classroomIds = $enseignant->cours()->pluck('classroom_id');
         $eleves = Eleve::whereIn('classroom_id', $classroomIds)
-             ->with(['user', 'classroom'])
-             ->get();
-
+        ->with(['user', 'classroom'])
+        ->get();
+        
         // Récupérer les cours que l'enseignant donne
         $cours = $enseignant->cours;
         $classes = $enseignant->classrooms;
-
+        
         // Récupérer les notes avec filtres
         $notes = $enseignant->notes()
                          ->with(['eleve.user', 'cour', 'classroom'])
@@ -50,9 +47,11 @@ class NoteController extends Controller
                          })
                          ->latest()
                          ->paginate(20);
-  
+                         
         return view('enseignant.notes.index', compact('notes', 'cours', 'classes', 'eleves'));
     }
+
+
 
     public function store(Request $request)
     {
