@@ -1,37 +1,107 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tableau de bord - Administrateur') }}
+        <h2 class="h4 fw-bold text-dark">
+            {{ __('Tableau de bord Administrateur') }}
         </h2>
     </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <h3 class="text-lg font-semibold mb-4">Bienvenue, {{ auth()->user()->name }}</h3>
-                    <p class="mb-4">Vous êtes connecté en tant qu'administrateur.</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <div class="bg-blue-100 p-4 rounded-lg">
-                            <h4 class="font-semibold text-blue-800">Gestion des utilisateurs</h4>
-                            <p class="text-sm text-blue-600">Gérer les élèves, enseignants et parents</p>
+    <div class="container py-4">
+        <!-- Cartes Statistiques -->
+        <div class="row g-4 mb-5">
+            @foreach([
+                ['label' => "Élèves", 'value' => $eleves, 'icon' => 'fas fa-user-graduate', 'color' => 'bg-primary'],
+                ['label' => "Enseignants", 'value' => $enseignants, 'icon' => 'fas fa-chalkboard-teacher', 'color' => 'bg-success'],
+                ['label' => "Classes", 'value' => $classes, 'icon' => 'fas fa-school', 'color' => 'bg-warning'],
+                ['label' => "Matières", 'value' => $cours, 'icon' => 'fas fa-book', 'color' => 'bg-danger']
+            ] as $stat)
+                <div class="col-md-3">
+                    <div class="card shadow text-white {{ $stat['color'] }}">
+                        <div class="card-body d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="card-title">{{ $stat['label'] }}</h5>
+                                <h2 class="fw-bold">{{ $stat['value'] }}</h2>
+                            </div>
+                            <i class="{{ $stat['icon'] }} fa-2x"></i>
                         </div>
-                        <div class="bg-green-100 p-4 rounded-lg">
-                            <h4 class="font-semibold text-green-800">Gestion des classes</h4>
-                            <p class="text-sm text-green-600">Organiser les classes et matières</p>
-                        </div>
-                        <div class="bg-purple-100 p-4 rounded-lg">
-                            <h4 class="font-semibold text-purple-800">Rapports généraux</h4>
-                            <p class="text-sm text-purple-600">Consulter les statistiques globales</p>
-                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <!-- Graphiques -->
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light fw-bold">Bulletins par mois</div>
+                    <div class="card-body">
+                        <canvas id="chartBulletins"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light fw-bold">Répartition des élèves par classe</div>
+                    <div class="card-body">
+                        <canvas id="chartClasses"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-light fw-bold">Moyenne par matière</div>
+                    <div class="card-body">
+                        <canvas id="chartMoyennes"></canvas>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    
+    @push('scripts')
+    <script>
+        const bulletinsChart = new Chart(document.getElementById('chartBulletins'), {
+            type: 'line',
+            data: {
+                labels: {!! json_encode($bulletinsParMois->keys()->all()) !!},
+                datasets: [{
+                    label: 'Nombre de bulletins',
+                    data: {!! json_encode($bulletinsParMois->values()->all()) !!},
+                    fill: false,
+                    borderColor: '#0d6efd',
+                    tension: 0.4
+                }]
+            }
+        });
 
+        const repartitionChart = new Chart(document.getElementById('chartClasses'), {
+            type: 'doughnut',
+            data: {
+                labels: {!! json_encode($repartitionClasses->keys()->all()) !!},
+                datasets: [{
+                    data: {!! json_encode($repartitionClasses->values()->all()) !!},
+                    backgroundColor: ['#0d6efd', '#dc3545', '#ffc107', '#198754', '#6f42c1']
+                }]
+            }
+        });
 
+        const moyenneChart = new Chart(document.getElementById('chartMoyennes'), {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($notesParCours->keys()->all()) !!},
+                datasets: [{
+                    label: 'Moyenne',
+                    data: {!! json_encode($notesParCours->values()->all()) !!},
+                    backgroundColor: '#198754'
+                }]
+            },
+            options: {
+                scales: {
+                    y: { beginAtZero: true, max: 20 }
+                }
+            }
+        });
+    </script>
+    @endpush
 </x-app-layout>
