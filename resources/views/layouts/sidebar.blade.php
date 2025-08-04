@@ -54,9 +54,15 @@
                 </li>
                 <li>
                     <a href="{{ route('enseignant.notes.index') }}">
-                        <i class="icon icon-book-open"></i>Notes
+                        <i class="icon icon-layout-25"></i>Notes
                     </a>
                 </li>
+                 <li>
+                    <a href="{{ route('enseignant.cours') }}">
+                        <i  class="icon icon-globe-2" ></i>Cours
+                    </a>
+                </li>
+
 
 
             {{-- Élève / Parent --}}

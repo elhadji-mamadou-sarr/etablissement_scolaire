@@ -32,8 +32,8 @@ class EnseignantController extends Controller
             'prenom' => 'required',
             'email' => 'required|email|unique:users,email',
             'telephone' => 'required',
-            'adresse' => 'required', // corrigé ici
-            'date_naissance' => 'required|date', // corrigé ici
+            'addresse' => 'required',
+            'date_naissance' => 'required|date',
             'lieu' => 'required',
             'sexe' => ['required', Rule::in(['M', 'F'])],
             'cours' => 'required|array',
@@ -45,8 +45,8 @@ class EnseignantController extends Controller
             'prenom' => $request->prenom,
             'email' => $request->email,
             'telephone' => $request->telephone,
-            'adresse' => $request->adresse, // corrigé ici
-            'date_naissance' => $request->date_naissance, // corrigé ici
+            'addresse' => $request->addresse,
+            'date_naissane' => $request->date_naissance,
             'lieu' => $request->lieu,
             'sexe' => $request->sexe,
             'password' => bcrypt('0000'),

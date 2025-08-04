@@ -43,9 +43,11 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::get('classes/{classroom}/cours', [ClassroomController::class, 'listCours']);
     Route::post('classes/{classroom}/cours/attach', [ClassroomController::class, 'attachCour']);
     Route::post('classes/{classroom}/cours/detach', [ClassroomController::class, 'detachCour']);
+
     Route::apiResource('users', UserApiController::class);
     Route::apiResource('cours', CourController::class);
     Route::apiResource('eleves', EleveApiController::class);
+
     Route::apiResource('enseignants', EnseignantApiController::class);
     Route::apiResource('notes', NoteController::class);
 
@@ -54,4 +56,3 @@ Route::middleware('auth:sanctum')->name('api.')->group(function () {
     Route::post('bulletins/note', [BulletinApiController::class, 'storeNote']);
     Route::put('bulletins/note/{id}', [BulletinApiController::class, 'updateNote']);
 });
-

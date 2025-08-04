@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Cours</label>
-                                    <select name="cours[]" id="cours" class="form-control" multiple required>
+                                    <select name="cours[]" id="cours" class="" multiple required>
                                         @foreach($cours as $c)
                                             <option value="{{ $c->id }}">{{ $c->libelle }}</option>
                                         @endforeach
